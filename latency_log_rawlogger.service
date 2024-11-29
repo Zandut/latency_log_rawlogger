@@ -1,0 +1,19 @@
+[Unit]
+Description=Log Writer Rawlogger Clickhouse
+After=clickhouse-server.service
+
+[Service]
+WorkingDirectory=/home/developer
+ExecStart=/home/developer/latency_log_rawlogger/latency_log_rawlogger --nsqd-tcp-address=qansq1.ktbfuso.id:4150 --topic=delayeddata_from_realtime --channel=rawlogger --output-dir=/home/developer/latency_log_rawlogger --rotate-interval=59s --max-in-flight=200 --log-level=warn
+ExecReload=/bin/kill -HUP $MAINPID
+Type=simple
+KillMode=process
+Restart=on-failure
+RestartSec=10s
+User=developer
+LimitNOFILE=50000
+LimitNPROC=50000
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target
